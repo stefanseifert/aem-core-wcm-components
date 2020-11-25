@@ -60,6 +60,17 @@ public @interface HtmlPageItemsConfig {
      *
      * @since com.adobe.cq.wcm.core.components.config 1.0.0
      */
-    @Property(label = "Prefix path")
+    @Property(label = "Prefix path", order = 0)
     String prefixPath() default "";
+
+    /**
+     * Returns the configured items.
+     *
+     * @return The items
+     *
+     * @since com.adobe.cq.wcm.core.components.config 1.1.0
+     */
+    @Property(label = "Items", order = 1)
+    HtmlPageItemConfig[] items();
+
 }
