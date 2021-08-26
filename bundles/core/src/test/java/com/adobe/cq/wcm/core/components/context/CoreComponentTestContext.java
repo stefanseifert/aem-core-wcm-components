@@ -26,6 +26,7 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.impl.ResourceTypeBasedResourcePicker;
 import org.apache.sling.models.spi.ImplementationPicker;
 import org.apache.sling.testing.mock.sling.ResourceResolverType;
+import org.osgi.framework.Constants;
 
 import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.wcm.core.components.internal.link.DefaultPathProcessor;
@@ -91,9 +92,10 @@ public final class CoreComponentTestContext {
                                 .filter(r -> !IGNORED_NODE_NAMES.contains(r.getName()))
                                 .collect(Collectors.toList());
                         }
-                    });
+                    }, Constants.SERVICE_RANKING, 1000);
                     context.registerService(ImplementationPicker.class, new ResourceTypeBasedResourcePicker());
-                    context.registerService(Externalizer.class, MockExternalizerFactory.getExternalizerService());
+                    context.registerService(Externalizer.class, MockExternalizerFactory.getExternalizerService(),
+                            Constants.SERVICE_RANKING, 1000);
                     context.registerInjectActivateService(new DefaultPathProcessor(), ImmutableMap.of(
                             "vanityConfig", DefaultPathProcessor.VanityConfig.ALWAYS.getValue()));
                 }
