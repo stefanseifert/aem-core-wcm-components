@@ -23,7 +23,12 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import com.day.cq.commons.Externalizer;
+import io.wcm.sling.commons.request.impl.RequestContextFilterImpl;
+import io.wcm.sling.models.injectors.impl.AemObjectInjector;
+import io.wcm.sling.models.injectors.impl.ModelsImplConfiguration;
+import io.wcm.sling.models.injectors.impl.SlingObjectOverlayInjector;
 import io.wcm.testing.mock.aem.MockExternalizer;
+import io.wcm.testing.mock.aem.junit5.AemContextCallback;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.impl.ResourceTypeBasedResourcePicker;
@@ -67,7 +72,7 @@ public final class CoreComponentTestContext {
             ));
 
     public static AemContext newAemContext() {
-        return new AemContextBuilder()
+        AemContextBuilder aemContextBuilder =  new AemContextBuilder()
                 .plugin(CACONFIG)
                 .resourceResolverType(ResourceResolverType.JCR_MOCK)
                 .resourceResolverFactoryActivatorProps(PROPERTIES)
@@ -104,7 +109,21 @@ public final class CoreComponentTestContext {
                     context.registerInjectActivateService(new DefaultPathProcessor(), ImmutableMap.of(
                             "vanityConfig", DefaultPathProcessor.VanityConfig.ALWAYS.getValue()));
                 }
-            )
-            .build();
+            );
+            if(System.getProperty("customInjectors") != null) {
+                aemContextBuilder.afterSetUp(WCM_IO_MODELS_INJECTORS);
+            }
+            return aemContextBuilder.build();
     }
+
+
+    /**
+     * Register WCM.IO @AemObject and @SlingObject overlay injector
+     */
+    private static final AemContextCallback WCM_IO_MODELS_INJECTORS = context -> {
+        context.registerInjectActivateService(new ModelsImplConfiguration());
+        context.registerInjectActivateService(new RequestContextFilterImpl());
+        context.registerInjectActivateService(new AemObjectInjector());
+        context.registerInjectActivateService(new SlingObjectOverlayInjector());
+    };
 }

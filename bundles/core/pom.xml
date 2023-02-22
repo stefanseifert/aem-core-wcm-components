@@ -548,6 +548,20 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Test of Performance -->
+        <!-- WCM IO -->
+        <dependency>
+            <groupId>io.wcm</groupId>
+            <artifactId>io.wcm.sling.commons</artifactId>
+            <version>1.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.wcm</groupId>
+            <artifactId>io.wcm.sling.models</artifactId>
+            <version>1.6.0</version>
+        </dependency>
+
+
         <dependency>
             <groupId>com.adobe.aem</groupId>
             <artifactId>uber-jar</artifactId>
