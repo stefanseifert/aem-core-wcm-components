@@ -75,8 +75,11 @@ public final class CoreComponentTestContext {
         AemContextBuilder aemContextBuilder =  new AemContextBuilder()
                 .plugin(CACONFIG)
                 .resourceResolverType(ResourceResolverType.JCR_MOCK)
-                .resourceResolverFactoryActivatorProps(PROPERTIES)
-            .<AemContext>afterSetUp(context -> {
+                .resourceResolverFactoryActivatorProps(PROPERTIES);
+        if(System.getProperty("customInjectors") != null) {
+            aemContextBuilder.afterSetUp(WCM_IO_MODELS_INJECTORS);
+        }
+        aemContextBuilder.afterSetUp((AemContext context) -> {
                     context.addModelsForClasses(MockResponsiveGrid.class);
                     context.addModelsForPackage("com.adobe.cq.wcm.core.components.models");
                     context.addModelsForPackage("com.adobe.cq.wcm.core.components.internal.link");
@@ -110,9 +113,6 @@ public final class CoreComponentTestContext {
                             "vanityConfig", DefaultPathProcessor.VanityConfig.ALWAYS.getValue()));
                 }
             );
-            if(System.getProperty("customInjectors") != null) {
-                aemContextBuilder.afterSetUp(WCM_IO_MODELS_INJECTORS);
-            }
             return aemContextBuilder.build();
     }
 
