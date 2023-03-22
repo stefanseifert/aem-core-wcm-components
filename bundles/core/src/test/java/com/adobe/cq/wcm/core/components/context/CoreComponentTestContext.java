@@ -77,7 +77,7 @@ public final class CoreComponentTestContext {
                 .resourceResolverType(ResourceResolverType.JCR_MOCK)
                 .resourceResolverFactoryActivatorProps(PROPERTIES);
         if(System.getProperty("customInjectors") != null) {
-            aemContextBuilder.afterSetUp(WCM_IO_MODELS_INJECTORS);
+            aemContextBuilder.beforeSetUp(WCM_IO_MODELS_INJECTORS);
         }
         aemContextBuilder.afterSetUp((AemContext context) -> {
                     context.addModelsForClasses(MockResponsiveGrid.class);
